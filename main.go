@@ -1,27 +1,37 @@
 package main
 
 import (
+	"cleanArchitechureGo/config"
+	"cleanArchitechureGo/module/item/storage"
 	ginItem "cleanArchitechureGo/module/item/transport/gin"
+
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-	"log"
+	"github.com/lpernett/godotenv"
+	"github.com/samber/do"
 )
 
-func main() {
-	dsnDB := "user=postgres password=postgres dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(mysql.Open(dsnDB), &gorm.Config{})
+func init() {
+	var pathFileEnv = "local.env"
+	err := godotenv.Load(pathFileEnv)
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
-	log.Println("Connected to database", db)
-	r := gin.Default()
+}
 
+func main() {
+	//Load environment variables
+	config.LoadCfgEnv()
+	var injector = do.New()
+
+	// Register mysql for sql store
+	do.Provide(injector, storage.NewMySQL)
+
+	r := gin.Default()
 	v1 := r.Group("/v1")
 	{
 		item := v1.Group("/item")
 		{
-			item.POST("", ginItem.CreateNewItem(db))
+			item.POST("", ginItem.CreateNewItem(injector))
 		}
 	}
 }

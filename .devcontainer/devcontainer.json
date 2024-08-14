@@ -1,0 +1,37 @@
+{
+  "name": "clean-architecture",
+  "dockerComposeFile": ["../compose.yaml"],
+  "service": "dev",
+  "workspaceFolder": "/src",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash"
+          }
+        }
+      },
+      "extensions": [
+        "golang.Go",
+        "yokoe.vscode-postfix-go",
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        "christian-kohler.path-intellisense",
+        "streetsidesoftware.code-spell-checker",
+        "redhat.vscode-yaml",
+        "zxh404.vscode-proto3",
+        "Gruntfuggly.todo-tree",
+        "esbenp.prettier-vscode",
+        "formulahendry.terminal"
+      ]
+    }
+  },
+  // "postAttachCommand": "bash scripts/attach-command.sh",
+  "portsAttributes": {
+    "50053": {
+      "label": "50052"
+    }
+  }
+}

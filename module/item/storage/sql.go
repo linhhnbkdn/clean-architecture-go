@@ -1,11 +1,15 @@
 package storage
 
-import "gorm.io/gorm"
+import (
+	"github.com/samber/do"
+	"gorm.io/gorm"
+)
 
 type SqlStore struct {
 	db *gorm.DB
 }
 
-func NewSQLStorage(db *gorm.DB) *SqlStore {
-	return &SqlStore{db: db}
+func NewSQLStorage(i *do.Injector) *SqlStore {
+	var database = do.MustInvoke[*gorm.DB](i)
+	return &SqlStore{db: database}
 }

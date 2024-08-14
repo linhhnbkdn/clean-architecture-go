@@ -1,0 +1,53 @@
+name: clean-architecture-go
+services:
+  dev:
+    build:
+      context: .
+      target: dev
+    env_file:
+      - .local.env
+    volumes:
+    - .:/src
+    ports:
+      - 50052:50052
+    command: bash -c "while true; do echo hello; sleep 2; done"
+  db:
+    image: mysql:8.4
+    command: '--mysql-native-password=ON'
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: clean-architecture-go
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: pass1234
+      TZ: Asia/Tokyo
+    volumes:
+      - mysql:/var/lib/mysql
+      - ../mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ../mysql/grant_test_db.sql:/docker-entrypoint-initdb.d/grant_test_db.sql
+    container_name: clean-architecture-go-db
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - -h
+        - localhost
+      timeout: 5s
+      retries: 10
+  phpMyAdmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 40000:80
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - db
+    networks:
+      - default
+volumes:
+  mysql:
+networks:
+  default:

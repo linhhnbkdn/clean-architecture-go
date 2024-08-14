@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "serve",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}",
+      "args": ["serve"],
+      "envFile": "${workspaceFolder}/.local.env",
+    },
+    {
+      "name": "makemigrations",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}",
+      "args": ["makemigrations"],
+      "envFile": "${workspaceFolder}/.local.env",
+    }
+  ]
+}
